@@ -7,26 +7,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import org.nationsatwar.ispy.Commands.CreateCommand;
+import org.nationsatwar.ispy.Commands.LoadCommand;
 
-public class CommandParser implements CommandExecutor {
+public final class CommandParser implements CommandExecutor {
 
 	protected final ISpy plugin;
-	
-	protected final CreateCommand createCommand;
+
+	public final CreateCommand createCommand;
+	public final LoadCommand loadCommand;
 	
 	public CommandParser(ISpy plugin) {
 		
 		this.plugin = plugin;
 		
 		createCommand = new CreateCommand(plugin);
+		loadCommand = new LoadCommand(plugin);
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String argsLabel, String[] args) {
-		
-		// Turns all arguments to lower-case
-		for (int i = 0; i < args.length; i++)
-			args[i] = args[i].toLowerCase();
 		
 		// -ispy OR -ispy help
 		if (args.length == 0 || args[0].equals("help"))
@@ -35,6 +34,10 @@ public class CommandParser implements CommandExecutor {
 		// -ispy create
 		else if (args[0].equals("create"))
 			createCommand(sender, args);
+		
+		// -ispy load
+		else if (args[0].equals("load"))
+			loadCommand(sender, args);
 		
 		// -ispy <non-applicable command>
 		else {
@@ -80,15 +83,44 @@ public class CommandParser implements CommandExecutor {
 		if (!isPlayer(sender))
 			return;
 		
+		// Gets the player sending the command
+		Player player = (Player) sender;
+		
 		// Stores the full trigger name
 		String triggerName = getRemainingString(1, args);
 		
-		// Gets the player and the current world of the player sending the command
+		// Execute Create Command
+		createCommand.execute(player, triggerName);
+	}
+
+	/**
+	 * Returns help and parses the 'Load' command for execution.
+	 * 
+	 * @param sender  Person sending the command
+	 * @param args  String of arguments associated with the command
+	 */
+	private void loadCommand(CommandSender sender, String[] args) {
+
+		if (args.length <= 1 || args[1].equals("help")) {
+			
+			sender.sendMessage(ChatColor.DARK_RED + "[Nations at War]" + ChatColor.DARK_AQUA + " -=[LOAD]=-");
+			sender.sendMessage(ChatColor.DARK_AQUA + "i.e. '/ispy load <trigger name>");
+			sender.sendMessage(ChatColor.YELLOW + "Loads a trigger for future commands. (Default: Last created trigger.)");
+			return;
+		}
+		
+		// Cancel if command is sent from console
+		if (!isPlayer(sender))
+			return;
+		
+		// Gets the player sending the command
 		Player player = (Player) sender;
-		String worldName = player.getWorld().getName();
+		
+		// Stores the full trigger name
+		String triggerName = getRemainingString(1, args);
 		
 		// Execute Create Command
-		createCommand.execute(player, worldName, triggerName);
+		loadCommand.execute(player, triggerName);
 	}
 
 	/**

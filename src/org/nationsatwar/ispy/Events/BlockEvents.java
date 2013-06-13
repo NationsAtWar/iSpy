@@ -10,8 +10,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
 import org.nationsatwar.ispy.Conditions.ConditionUtility;
+import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
 
-public class BlockEvents implements Listener {
+public final class BlockEvents implements Listener {
 	
 	protected final ISpy plugin;
     
@@ -27,24 +28,36 @@ public class BlockEvents implements Listener {
     	String worldName = event.getPlayer().getWorld().getName();
     	
     	// Get list of all triggers that contain event
-    	List<Trigger> triggers = EventUtility.initiateTriggers(worldName, EventUtility.blockPlace);
+    	List<Trigger> triggers = EventUtility.getInitiatedTriggers(worldName, EventUtility.blockPlace);
     	
     	// Add event properties to each trigger
     	for (Trigger trigger : triggers) {
     		
-    		trigger.setBlockLocation(event.getBlock().getLocation());
-    		trigger.setPlayerName(event.getPlayer().getName());
+    		trigger.setBlockLocation(new ISpyLocation(event.getBlock().getLocation()));
+    		trigger.setBlockPlacer(event.getPlayer().getName());
     	}
     	
     	// Send triggers to check against conditions
-    	for (Trigger trigger : triggers)
-    		if (ConditionUtility.checkConditions(trigger))
-    			plugin.log("Boo yeah baby");
+    	ConditionUtility.checkConditions(triggers);
     }
     
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
     	
-    	plugin.log("LOL");
+    	// Get world name
+    	String worldName = event.getPlayer().getWorld().getName();
+    	
+    	// Get list of all triggers that contain event
+    	List<Trigger> triggers = EventUtility.getInitiatedTriggers(worldName, EventUtility.blockBreak);
+    	
+    	// Add event properties to each trigger
+    	for (Trigger trigger : triggers) {
+    		
+    		trigger.setBlockLocation(new ISpyLocation(event.getBlock().getLocation()));
+    		trigger.setBlockBreaker(event.getPlayer().getName());
+    	}
+    	
+    	// Send triggers to check against conditions
+    	ConditionUtility.checkConditions(triggers);
     }
 }

@@ -12,28 +12,33 @@ import org.nationsatwar.ispy.Events.BlockEvents;
  * 
  * @author Aculem
  */
-public class ISpy extends JavaPlugin {
+public final class ISpy extends JavaPlugin {
 	
-	private final Logger log = Logger.getLogger("Minecraft");
+	public final CommandParser commandParser = new CommandParser(this);;
+	public final TriggerManager triggerManager = new TriggerManager(this);;
 	
-	protected CommandParser commandParser;
+	// iSpy Path Details
+	public static final String triggerPath = "/triggers/";
+	public static final String triggerExtension = ".yml";
+	public static final String configNamePath = "trigger.name";
+	public static final String configVariablesGlobalPath = "trigger.variables.global";
+	public static final String configVariablesLocalPath = "trigger.variables.local";
+	public static final String configEventsPath = "trigger.events";
+	public static final String configConditionsPath = "trigger.conditions";
+	public static final String configActionsPath = "trigger.actions";
 	
-	// iSpy Config Defaults
-	public static String triggerNamePath = "trigger.name";
-	public static String triggerEventsPath = "trigger.events";
-	public static String triggerConditionsPath = "trigger.conditions";
-	public static String triggerActionsPath = "trigger.actions";
+	private static final Logger log = Logger.getLogger("Minecraft");
 
 	/**
 	 * Initializes the plugin on server startup.
 	 */
 	public void onEnable() {
 		
-		getServer().getPluginManager().registerEvents(new BlockEvents(this), this);
-		
-		commandParser = new CommandParser(this);
-		
+		// Set Command Executor
     	getCommand("ispy").setExecutor(commandParser);
+		
+    	// Register Events
+		getServer().getPluginManager().registerEvents(new BlockEvents(this), this);
     	
     	log("iSpy has been enabled.");
 	}

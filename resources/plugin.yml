@@ -1,0 +1,13 @@
+name: iSpy
+main: org.nationsatwar.ispy.ISpy
+version: 1.0
+
+commands:
+  ispy:
+    description: Displays all iSpy commands.
+    permission: iSpy.basic
+    usage: /<command>
+    
+permissions:
+  ispy.*:
+    description: Gives access to all iSpy commands

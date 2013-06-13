@@ -9,11 +9,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
 
-public class EventUtility {
+public final class EventUtility {
 	
-	public static String blockPlace = "block place";
+	// Event Names
+	public static String blockPlace = "block.place";
+	public static String blockBreak = "block.break";
 	
-	public static List<Trigger> initiateTriggers(String worldName, String eventName) {
+	// Event variables
+	public static String eventBlockPlacer = "event.blockPlacer";
+	public static String eventBlockBreaker = "event.blockBreaker";
+	public static String eventBlockLocation = "event.blockLocation";
+	
+	public static List<Trigger> getInitiatedTriggers(String worldName, String eventName) {
 		
 		List<Trigger> triggers = new ArrayList<Trigger>();
 		
@@ -23,7 +30,7 @@ public class EventUtility {
 			
 			FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
 			
-			if (triggerConfig.getBoolean(ISpy.triggerEventsPath + "." + eventName)) {
+			if (triggerConfig != null && triggerConfig.getStringList(ISpy.configEventsPath).contains(eventName)) {
 				
 				Trigger trigger = new Trigger(triggerFile.getName(), worldName);
 				triggers.add(trigger);
@@ -31,5 +38,17 @@ public class EventUtility {
 		}
 		
 		return triggers;
+	}
+	
+	public static Object getEventVariable(String property, Trigger trigger) {
+		
+		if (property.equals(eventBlockPlacer))
+			return trigger.getBlockPlacer();
+		if (property.equals(eventBlockBreaker))
+			return trigger.getBlockBreaker();
+		else if (property.equals(eventBlockLocation))
+			return trigger.getBlockLocation();
+		
+		return property;
 	}
 }

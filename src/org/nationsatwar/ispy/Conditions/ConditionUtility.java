@@ -1,30 +1,51 @@
 package org.nationsatwar.ispy.Conditions;
 
 import java.io.File;
-import java.util.logging.Logger;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.nationsatwar.ispy.ConfigParser;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
+import org.nationsatwar.ispy.Actions.ActionUtility;
 
-public class ConditionUtility {
+public final class ConditionUtility {
 	
-	public static String playerName = "player name";
+	public static void checkConditions(List<Trigger> triggers) {
+		
+		for (Trigger trigger : triggers) {
+			
+			// Load the configuration file for each trigger
+			File triggerFile = new File(trigger.getWorldName() + "/triggers/" + trigger.getTriggerName());
+			FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
+			
+			// Cycle through each condition
+			for (String condition : triggerConfig.getStringList(ISpy.configConditionsPath))
+				if (!isTrueStatement(condition, trigger))
+					return;
+			
+			// Execute Action List if all conditions are true
+			ActionUtility.executeActions(trigger, triggerConfig.getStringList(ISpy.configActionsPath));
+		}
+	}
 	
-	public static boolean checkConditions(Trigger trigger) {
+	private static boolean isTrueStatement(String condition, Trigger trigger) {
 		
-		File triggerFile = new File(trigger.getWorldName() + "/triggers/" + trigger.getTriggerName());
-		FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
-		
-		String playerNamePath = ISpy.triggerConditionsPath + "." + playerName;
-		
-		for (String key : triggerConfig.getConfigurationSection(ISpy.triggerConditionsPath).getKeys(true))
-			Logger.getLogger("Minecraft").info(key);
-		
-		if (triggerConfig.contains(playerNamePath) &&
-				triggerConfig.getString(playerNamePath).equals(trigger.getPlayerName()))
-			return true;
+		for (int i = 1; i < condition.length(); i++) {
+			
+			if (condition.charAt(i) == '=' && condition.charAt(i - 1) == '=') {
+				
+				Object firstValue = ConfigParser.getLiteral(condition.substring(0, i - 2).trim(), trigger);
+				Object secondValue = ConfigParser.getLiteral(condition.substring(i + 1).trim(), trigger);
+				
+				if (firstValue == null || secondValue == null)
+					return false;
+				
+				if (firstValue.equals(secondValue))
+					return true;
+			}
+		}
 		
 		return false;
 	}

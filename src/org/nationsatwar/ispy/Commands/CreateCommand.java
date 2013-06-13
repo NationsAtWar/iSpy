@@ -2,7 +2,8 @@ package org.nationsatwar.ispy.Commands;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,11 +13,10 @@ import org.bukkit.entity.Player;
 
 import org.nationsatwar.ispy.ISpy;
 
-public class CreateCommand {
+public final class CreateCommand {
 
 	protected final ISpy plugin;
 	
-	private static Logger log = Logger.getLogger("Minecraft");
 	private static String lineBreak = "\r\n";
 	
 	public CreateCommand(ISpy plugin) {
@@ -28,14 +28,16 @@ public class CreateCommand {
 	 * Handles the 'Create' command.
 	 * <p>
 	 * Will create a new trigger for the developer to manipulate. This will create a config file
-	 * in the '(worldname)/triggers' directory.
+	 * in the '(worldname)/triggers/' directory.
 	 * 
-	 * @param sender  Person sending the command
-	 * @param args  String of arguments associated with the command
+	 * @param player  Person sending the command
+	 * @param worldName  The world of the player sending the command
+	 * @param triggerName  The name to call the new trigger
 	 */
-	public void execute(Player player, String worldName, String triggerName) {
+	public final void execute(Player player, String triggerName) {
 		
-	    File dataFile = new File(worldName + "/triggers/" + triggerName + ".yml");
+		String worldName = player.getWorld().getName();
+	    File dataFile = new File(worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension);
 	    
 	    // Return if trigger already exists
 	    if (dataFile.exists()) {
@@ -48,10 +50,21 @@ public class CreateCommand {
 	    FileConfigurationOptions configOptions = config.options();
 
 	    // Creates default config parameters on creation
-	    config.addDefault(ISpy.triggerNamePath, triggerName);
-	    config.addDefault(ISpy.triggerEventsPath + ".placeholder", "Event Name");
-	    config.addDefault(ISpy.triggerConditionsPath + ".placeholder", "Condition Name");
-	    config.addDefault(ISpy.triggerActionsPath + ".placeholder", "Action Name");
+	    
+	    List<String> eventPlaceholder = new ArrayList<String>();
+	    eventPlaceholder.add("New Event Here");
+	    List<String> conditionPlaceholder = new ArrayList<String>();
+	    conditionPlaceholder.add("New Condition Here");
+	    List<String> actionPlaceholder = new ArrayList<String>();
+	    actionPlaceholder.add("New Action Here");
+	    
+	    config.addDefault(ISpy.configNamePath, triggerName);
+	    config.addDefault(ISpy.configVariablesGlobalPath + ".someGlobal", "null");
+	    config.addDefault(ISpy.configVariablesLocalPath + ".someLocal", "null");
+	    config.addDefault(ISpy.configEventsPath, eventPlaceholder);
+	    config.addDefault(ISpy.configConditionsPath, conditionPlaceholder);
+	    config.addDefault(ISpy.configActionsPath, actionPlaceholder);
+	    
 	    configOptions.copyDefaults(true);
 	    
 	    // Add header to config file
@@ -59,13 +72,14 @@ public class CreateCommand {
 	    configOptions.header(header);
 	    configOptions.copyHeader(true);
 	    
-	    try {
-	    	
-	    	// Save Config file and end command
-	    	config.save(dataFile);
-	    	player.sendMessage(ChatColor.YELLOW + "Trigger name: '" + triggerName + "' created.");
-	    	player.sendMessage(ChatColor.YELLOW + "Edit '" + dataFile.getPath() + "' to start scripting your trigger.");
-	    	
-	    } catch (IOException e) { log.info("Error saving config file: " + e.getMessage()); }
+	    // Save the file
+	    try { config.save(dataFile); }
+	    catch (IOException e) { plugin.log("Error saving config file: " + e.getMessage()); }
+	    
+	    // Set the trigger to active for this user
+    	plugin.triggerManager.setActiveTrigger(player.getName(), triggerName);
+    	
+    	player.sendMessage(ChatColor.YELLOW + "Trigger name: '" + triggerName + "' created.");
+    	player.sendMessage(ChatColor.YELLOW + "Edit '" + dataFile.getPath() + "' to start scripting your trigger.");
 	}
 }

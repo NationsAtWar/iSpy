@@ -1,14 +1,20 @@
 package org.nationsatwar.ispy;
 
-import org.bukkit.Location;
+import java.util.logging.Logger;
 
-public class Trigger {
+import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
+
+public final class Trigger {
 	
-	private String triggerName;
-	private String worldName;
-
-	private String playerName;
-	private Location blockLocation;
+	Logger log = Logger.getLogger("Minecraft");
+	
+	private final String triggerName;
+	private final String worldName;
+	
+	private String blockPlacer;
+	private String blockBreaker;
+	
+	private ISpyLocation blockLocation;
 	
 	public Trigger(String triggerName, String worldName) {
 		
@@ -16,6 +22,7 @@ public class Trigger {
 		this.worldName = worldName;
 	}
 	
+	// Getters
 	public String getTriggerName() {
 		
 		return triggerName;
@@ -26,22 +33,33 @@ public class Trigger {
 		return worldName;
 	}
 	
-	public String getPlayerName() {
+	public String getBlockPlacer() {
 		
-		return playerName;
+		return blockPlacer;
 	}
 	
-	public Location getBlockLocation() {
+	public String getBlockBreaker() {
+		
+		return blockBreaker;
+	}
+	
+	public ISpyLocation getBlockLocation() {
 		
 		return blockLocation;
 	}
 	
-	public void setPlayerName(String playerName) {
+	// Setters
+	public void setBlockPlacer(String blockPlacer) {
 		
-		this.playerName = playerName;
+		this.blockPlacer = blockPlacer;
 	}
 	
-	public void setBlockLocation(Location blockLocation) {
+	public void setBlockBreaker(String blockBreaker) {
+		
+		this.blockBreaker = blockBreaker;
+	}
+	
+	public void setBlockLocation(ISpyLocation blockLocation) {
 		
 		this.blockLocation = blockLocation;
 	}
