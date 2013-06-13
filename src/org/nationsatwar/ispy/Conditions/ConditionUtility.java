@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.nationsatwar.ispy.ConfigParser;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
 import org.nationsatwar.ispy.Actions.ActionUtility;
+import org.nationsatwar.ispy.Utility.ConfigParser;
+
 
 public final class ConditionUtility {
 	
@@ -17,7 +18,7 @@ public final class ConditionUtility {
 		for (Trigger trigger : triggers) {
 			
 			// Load the configuration file for each trigger
-			File triggerFile = new File(trigger.getWorldName() + "/triggers/" + trigger.getTriggerName());
+			File triggerFile = new File(trigger.getTriggerFileName());
 			FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
 			
 			// Cycle through each condition
@@ -38,6 +39,9 @@ public final class ConditionUtility {
 				
 				Object firstValue = ConfigParser.getLiteral(condition.substring(0, i - 2).trim(), trigger);
 				Object secondValue = ConfigParser.getLiteral(condition.substring(i + 1).trim(), trigger);
+				
+				ISpy.log(firstValue.toString());
+				ISpy.log(secondValue.toString());
 				
 				if (firstValue == null || secondValue == null)
 					return false;

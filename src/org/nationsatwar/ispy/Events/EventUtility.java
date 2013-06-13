@@ -24,7 +24,7 @@ public final class EventUtility {
 		
 		List<Trigger> triggers = new ArrayList<Trigger>();
 		
-		File triggerDirectory = new File(worldName + "/triggers/");
+		File triggerDirectory = new File(worldName + ISpy.triggerPath);
 
 		for (File triggerFile : triggerDirectory.listFiles()) {
 			
@@ -32,7 +32,7 @@ public final class EventUtility {
 			
 			if (triggerConfig != null && triggerConfig.getStringList(ISpy.configEventsPath).contains(eventName)) {
 				
-				Trigger trigger = new Trigger(triggerFile.getName(), worldName);
+				Trigger trigger = new Trigger(triggerFile.getName().replaceFirst("[.][^.]+$", ""), worldName);
 				triggers.add(trigger);
 			}
 		}

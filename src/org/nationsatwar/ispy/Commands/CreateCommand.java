@@ -74,7 +74,7 @@ public final class CreateCommand {
 	    
 	    // Save the file
 	    try { config.save(dataFile); }
-	    catch (IOException e) { plugin.log("Error saving config file: " + e.getMessage()); }
+	    catch (IOException e) { ISpy.log("Error saving config file: " + e.getMessage()); }
 	    
 	    // Set the trigger to active for this user
     	plugin.triggerManager.setActiveTrigger(player.getName(), triggerName);

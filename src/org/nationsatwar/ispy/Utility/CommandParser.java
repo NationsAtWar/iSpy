@@ -1,4 +1,4 @@
-package org.nationsatwar.ispy;
+package org.nationsatwar.ispy.Utility;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Commands.CreateCommand;
 import org.nationsatwar.ispy.Commands.LoadCommand;
 

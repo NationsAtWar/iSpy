@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.nationsatwar.ispy.Events.BlockEvents;
+import org.nationsatwar.ispy.Utility.CommandParser;
+
 
 /**
  * The iSpy parent class.
@@ -56,7 +58,7 @@ public final class ISpy extends JavaPlugin {
 	 * 
 	 * @param logMessage  Message to send to the console.
 	 */
-	public void log(String logMessage) {
+	public static void log(String logMessage) {
 		
 		log.info("iSpy: " + logMessage);
 	}

@@ -1,5 +1,6 @@
 package org.nationsatwar.ispy;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
@@ -33,6 +34,12 @@ public final class Trigger {
 		return worldName;
 	}
 	
+	// Getters
+	public String getTriggerFileName() {
+		
+		return worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension;
+	}
+	
 	public String getBlockPlacer() {
 		
 		return blockPlacer;
@@ -43,9 +50,9 @@ public final class Trigger {
 		return blockBreaker;
 	}
 	
-	public ISpyLocation getBlockLocation() {
+	public Map<?, ?> getBlockLocation() {
 		
-		return blockLocation;
+		return blockLocation.serialize();
 	}
 	
 	// Setters

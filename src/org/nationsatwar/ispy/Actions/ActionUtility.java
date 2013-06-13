@@ -3,45 +3,78 @@ package org.nationsatwar.ispy.Actions;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.nationsatwar.ispy.ConfigParser;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
+import org.nationsatwar.ispy.Utility.ConfigParser;
+import org.nationsatwar.ispy.Utility.Debugger;
 
 public final class ActionUtility {
 	
-	private static Logger log = Logger.getLogger("Minecraft");
+	private static String messageAction = "message";
 	
 	public static void executeActions(Trigger trigger, List<String> actionList) {
 		
 		// Cycle through each action
 		for (String action : actionList) {
 			
-			for (int i = 0; i < action.length(); i++) {
+			String actionType = getActionType(action);
+
+			// Check if message operation
+			if (actionType.equals(messageAction)) {
 				
-				// Assignment Operation
-				if (action.charAt(i) == '=') {
+				if (!MessageAction.execute(trigger, action.substring(messageAction.length() + 1)))
+					Debugger.invalidAction(trigger, action);
+				
+				continue;
+			}
+			
+			// Check if assignment operation
+			else {
+				
+				boolean validAction = false;
+				
+				for (int i = 0; i < action.length(); i++) {
 					
-					assignmentAction(action, trigger, i);
-					return;
+					// Assignment Operation
+					if (action.charAt(i) == '=') {
+						
+						assignmentAction(action, trigger, i);
+						validAction = true;
+						break;
+					}
 				}
+				
+				if (validAction)
+					continue;
+				
+				// Invalid operation
+				Debugger.invalidAction(trigger, action);
 			}
 		}
 	}
 	
 	private static void assignmentAction(String action, Trigger trigger, int assignmentOperatorPos) {
 		
-		String variableName = (String) ConfigParser.getLiteral(action.substring(0, assignmentOperatorPos - 1).trim(), trigger);
-		Object variableValue = ConfigParser.getLiteral(action.substring(assignmentOperatorPos + 1).trim(), trigger);
+		String firstValue = action.substring(0, assignmentOperatorPos - 1).trim();
+		String secondValue = action.substring(assignmentOperatorPos + 1).trim();
+		
+		String variableName = (String) ConfigParser.getLiteral(firstValue, trigger);
+		Object variableValue = ConfigParser.getLiteral(secondValue, trigger);
 		ConfigurationSerializable serializedValue = (variableValue instanceof ConfigurationSerializable) ? 
 			(ConfigurationSerializable) variableValue : null;
 		
+		if (variableValue == null) {
+			
+			Debugger.invalidValue(trigger, secondValue);
+			return;
+		}
+		
 		// Load trigger config
-		File dataFile = new File(trigger.getWorldName() + ISpy.triggerPath + trigger.getTriggerName());
+		File dataFile = new File(trigger.getTriggerFileName());
 		FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(dataFile);
 
 		String globalPath = ISpy.configVariablesGlobalPath + "." + variableName;
@@ -66,6 +99,15 @@ public final class ActionUtility {
 		}
 		
 	    try { triggerConfig.save(dataFile); }
-	    catch (IOException e) { log.info("Failure saving config: " + e.getMessage()); }
+	    catch (IOException e) { ISpy.log("Failure saving config: " + e.getMessage()); }
+	}
+	
+	private static String getActionType(String action) {
+		
+		for (int i = 1; i < action.length(); i++)
+			if (action.charAt(i) == ' ')
+				return action.substring(0, i);;
+			
+		return "";
 	}
 }
