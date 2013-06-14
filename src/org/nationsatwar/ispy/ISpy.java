@@ -23,11 +23,14 @@ public final class ISpy extends JavaPlugin {
 	public static final String triggerPath = "/triggers/";
 	public static final String triggerExtension = ".yml";
 	public static final String configNamePath = "trigger.name";
+	public static final String configActivePath = "trigger.active";
+	public static final String configCounterPath = "trigger.counter";
 	public static final String configVariablesGlobalPath = "trigger.variables.global";
 	public static final String configVariablesLocalPath = "trigger.variables.local";
 	public static final String configEventsPath = "trigger.events";
 	public static final String configConditionsPath = "trigger.conditions";
 	public static final String configActionsPath = "trigger.actions";
+	public static final String configRecordPath = "trigger.record";
 	
 	private static final Logger log = Logger.getLogger("Minecraft");
 

@@ -37,16 +37,17 @@ public final class CreateCommand {
 	public final void execute(Player player, String triggerName) {
 		
 		String worldName = player.getWorld().getName();
-	    File dataFile = new File(worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension);
+		String fullTriggerPath = worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension;
+	    File triggerFile = new File(fullTriggerPath);
 	    
 	    // Return if trigger already exists
-	    if (dataFile.exists()) {
+	    if (triggerFile.exists()) {
 	    	
 	    	player.sendMessage(ChatColor.YELLOW + "Trigger name: " + triggerName + " already exists for this world.");
 	    	return;
 	    }
 		
-	    FileConfiguration config = YamlConfiguration.loadConfiguration(dataFile);
+	    FileConfiguration config = YamlConfiguration.loadConfiguration(triggerFile);
 	    FileConfigurationOptions configOptions = config.options();
 
 	    // Creates default config parameters on creation
@@ -59,11 +60,14 @@ public final class CreateCommand {
 	    actionPlaceholder.add("New Action Here");
 	    
 	    config.addDefault(ISpy.configNamePath, triggerName);
+	    config.addDefault(ISpy.configActivePath, true);
+	    config.addDefault(ISpy.configCounterPath, -1);
 	    config.addDefault(ISpy.configVariablesGlobalPath + ".someGlobal", "null");
 	    config.addDefault(ISpy.configVariablesLocalPath + ".someLocal", "null");
 	    config.addDefault(ISpy.configEventsPath, eventPlaceholder);
 	    config.addDefault(ISpy.configConditionsPath, conditionPlaceholder);
 	    config.addDefault(ISpy.configActionsPath, actionPlaceholder);
+	    config.addDefault(ISpy.configRecordPath, "none");
 	    
 	    configOptions.copyDefaults(true);
 	    
@@ -73,13 +77,13 @@ public final class CreateCommand {
 	    configOptions.copyHeader(true);
 	    
 	    // Save the file
-	    try { config.save(dataFile); }
+	    try { config.save(triggerFile); }
 	    catch (IOException e) { ISpy.log("Error saving config file: " + e.getMessage()); }
 	    
 	    // Set the trigger to active for this user
-    	plugin.triggerManager.setActiveTrigger(player.getName(), triggerName);
+    	plugin.triggerManager.setActiveTrigger(player.getName(), fullTriggerPath);
     	
     	player.sendMessage(ChatColor.YELLOW + "Trigger name: '" + triggerName + "' created.");
-    	player.sendMessage(ChatColor.YELLOW + "Edit '" + dataFile.getPath() + "' to start scripting your trigger.");
+    	player.sendMessage(ChatColor.YELLOW + "Edit '" + triggerFile.getPath() + "' to start scripting your trigger.");
 	}
 }

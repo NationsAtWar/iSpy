@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
@@ -55,6 +56,26 @@ public final class BlockEvents implements Listener {
     		
     		trigger.setBlockLocation(new ISpyLocation(event.getBlock().getLocation()));
     		trigger.setBlockBreaker(event.getPlayer().getName());
+    	}
+    	
+    	// Send triggers to check against conditions
+    	ConditionUtility.checkConditions(triggers);
+    }
+    
+    @EventHandler
+    private void onPlayerInteract(PlayerInteractEvent event) {
+    	
+    	// Get world name
+    	String worldName = event.getPlayer().getWorld().getName();
+    	
+    	// Get list of all triggers that contain event
+    	List<Trigger> triggers = EventUtility.getInitiatedTriggers(worldName, EventUtility.blockUse);
+    	
+    	// Add event properties to each trigger
+    	for (Trigger trigger : triggers) {
+    		
+    		trigger.setBlockLocation(new ISpyLocation(event.getClickedBlock().getLocation()));
+    		trigger.setBlockUser(event.getPlayer().getName());
     	}
     	
     	// Send triggers to check against conditions

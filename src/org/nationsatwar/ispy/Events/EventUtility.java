@@ -14,6 +14,7 @@ public final class EventUtility {
 	// Event Names
 	public static String blockPlace = "block.place";
 	public static String blockBreak = "block.break";
+	public static String blockUse = "block.use";
 	
 	// Event variables
 	public static String eventBlockPlacer = "event.blockPlacer";
@@ -25,12 +26,21 @@ public final class EventUtility {
 		List<Trigger> triggers = new ArrayList<Trigger>();
 		
 		File triggerDirectory = new File(worldName + ISpy.triggerPath);
+		
+		if (!triggerDirectory.exists())
+			return triggers;
 
 		for (File triggerFile : triggerDirectory.listFiles()) {
 			
 			FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
 			
-			if (triggerConfig != null && triggerConfig.getStringList(ISpy.configEventsPath).contains(eventName)) {
+			boolean triggerActive = triggerConfig.getBoolean(ISpy.configActivePath); // Trigger must be active
+			int triggerCounter = triggerConfig.getInt(ISpy.configCounterPath); // Counter must not be 0
+			
+			// If config file exists, is active, the counter is not at 0, 
+			// and contains the event name, then add trigger to List
+			if (triggerConfig != null && triggerActive && triggerCounter != 0 && 
+					triggerConfig.getStringList(ISpy.configEventsPath).contains(eventName)) {
 				
 				Trigger trigger = new Trigger(triggerFile.getName().replaceFirst("[.][^.]+$", ""), worldName);
 				triggers.add(trigger);

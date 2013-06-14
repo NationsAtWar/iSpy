@@ -14,6 +14,7 @@ public final class Trigger {
 	
 	private String blockPlacer;
 	private String blockBreaker;
+	private String blockUser;
 	
 	private ISpyLocation blockLocation;
 	
@@ -50,6 +51,11 @@ public final class Trigger {
 		return blockBreaker;
 	}
 	
+	public String getBlockUser() {
+		
+		return blockUser;
+	}
+	
 	public Map<?, ?> getBlockLocation() {
 		
 		return blockLocation.serialize();
@@ -64,6 +70,11 @@ public final class Trigger {
 	public void setBlockBreaker(String blockBreaker) {
 		
 		this.blockBreaker = blockBreaker;
+	}
+	
+	public void setBlockUser(String blockUser) {
+		
+		this.blockUser = blockUser;
 	}
 	
 	public void setBlockLocation(ISpyLocation blockLocation) {

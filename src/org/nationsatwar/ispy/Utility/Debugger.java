@@ -14,4 +14,9 @@ public final class Debugger  {
 		
 		ISpy.log(trigger.getTriggerFileName() + ": " + value + " is not a valid action.");
 	}
+	
+	public static void triggerDoesntExist(String fileName) {
+		
+		ISpy.log(fileName + " does not exist.");
+	}
 }

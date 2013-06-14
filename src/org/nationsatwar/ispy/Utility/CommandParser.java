@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Commands.CreateCommand;
 import org.nationsatwar.ispy.Commands.LoadCommand;
+import org.nationsatwar.ispy.Commands.RecordCommand;
 
 public final class CommandParser implements CommandExecutor {
 
@@ -16,6 +17,7 @@ public final class CommandParser implements CommandExecutor {
 
 	public final CreateCommand createCommand;
 	public final LoadCommand loadCommand;
+	public final RecordCommand recordCommand;
 	
 	public CommandParser(ISpy plugin) {
 		
@@ -23,6 +25,7 @@ public final class CommandParser implements CommandExecutor {
 		
 		createCommand = new CreateCommand(plugin);
 		loadCommand = new LoadCommand(plugin);
+		recordCommand = new RecordCommand(plugin);
 	}
 	
 	@Override
@@ -39,6 +42,10 @@ public final class CommandParser implements CommandExecutor {
 		// -ispy load
 		else if (args[0].equals("load"))
 			loadCommand(sender, args);
+		
+		// -ispy record
+		else if (args[0].equals("record"))
+			recordCommand(sender, args);
 		
 		// -ispy <non-applicable command>
 		else {
@@ -122,6 +129,36 @@ public final class CommandParser implements CommandExecutor {
 		
 		// Execute Create Command
 		loadCommand.execute(player, triggerName);
+	}
+
+	/**
+	 * Returns help and parses the 'Record' command for execution.
+	 * 
+	 * @param sender  Person sending the command
+	 * @param args  String of arguments associated with the command
+	 */
+	private void recordCommand(CommandSender sender, String[] args) {
+
+		if (args.length <= 1 || args[1].equals("help")) {
+			
+			sender.sendMessage(ChatColor.DARK_RED + "[Nations at War]" + ChatColor.DARK_AQUA + " -=[RECORD]=-");
+			sender.sendMessage(ChatColor.DARK_AQUA + "i.e. '/ispy record [location/item/block]");
+			sender.sendMessage(ChatColor.YELLOW + "Records information into the config file.");
+			return;
+		}
+		
+		// Cancel if command is sent from console
+		if (!isPlayer(sender))
+			return;
+		
+		// Gets the player sending the command
+		Player player = (Player) sender;
+		
+		// Gets the 'Record' sub-data
+		String commandData = getRemainingString(1, args);
+		
+		// Execute Create Command
+		recordCommand.execute(player, commandData);
 	}
 
 	/**

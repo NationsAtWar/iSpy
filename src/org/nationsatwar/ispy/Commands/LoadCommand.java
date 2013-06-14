@@ -28,7 +28,8 @@ public final class LoadCommand {
 	public final void execute(Player player, String triggerName) {
 		
 		String worldName = player.getWorld().getName();
-	    File dataFile = new File(worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension);
+		String fullTriggerPath = worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension;
+	    File dataFile = new File(fullTriggerPath);
 	    
 	    // Return if trigger already exists
 	    if (!dataFile.exists()) {
@@ -38,6 +39,8 @@ public final class LoadCommand {
 	    }
 	    
 	    // Set the trigger as active for this user
-    	plugin.triggerManager.setActiveTrigger(player.getName(), triggerName);
+    	plugin.triggerManager.setActiveTrigger(player.getName(), fullTriggerPath);
+    	
+    	player.sendMessage(ChatColor.YELLOW + triggerName + " has been loaded.");
 	}
 }

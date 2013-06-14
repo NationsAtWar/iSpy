@@ -1,6 +1,7 @@
 package org.nationsatwar.ispy.Conditions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,6 +26,17 @@ public final class ConditionUtility {
 			for (String condition : triggerConfig.getStringList(ISpy.configConditionsPath))
 				if (!isTrueStatement(condition, trigger))
 					return;
+			
+			int triggerCounter = triggerConfig.getInt(ISpy.configCounterPath);
+			
+			// Tick counter down if eligible
+			if (triggerCounter > 0) {
+				
+				triggerConfig.set(ISpy.configCounterPath, triggerCounter - 1);
+				
+				try { triggerConfig.save(triggerFile); }
+			    catch (IOException e) { ISpy.log("Error saving config file: " + e.getMessage()); }
+			}
 			
 			// Execute Action List if all conditions are true
 			ActionUtility.executeActions(trigger, triggerConfig.getStringList(ISpy.configActionsPath));

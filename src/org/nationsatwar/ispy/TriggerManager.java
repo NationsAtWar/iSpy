@@ -6,7 +6,7 @@ public final class TriggerManager {
 
 	protected final ISpy plugin;
 	
-	// Key: user name | Value: Trigger Name
+	// Key: User name | Value: Trigger Path
 	private HashMap<String, String> activeTriggers;
 
 	public TriggerManager(ISpy plugin) {
