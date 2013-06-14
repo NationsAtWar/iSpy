@@ -29,6 +29,8 @@ local
 
 (EVENTS)
 
+Each event will store a number of hidden local variables that the rest of the trigger can use.
+
 block.place
  - event.blockLocation
  - event.blockPlacer
@@ -54,11 +56,12 @@ IMPORTANT NOTE
 
 Spaces are important, especially in actions, it's the way arguments are parsed from one another.
 If you want to pass a string with spaces, then put the string inside quotation marks.
-Example: message event.getPlayer "This is a message"
+ - Example: message event.getPlayer "This is a message"
+
 The above will be read as three arguments and the action can be executed correctly.
 
 Assignment Operator
- '=' - This will assign the right operand to the left operand
+ - '=' - This will assign the right operand to the left operand
 
 Message
  - This will message a string to the player.
