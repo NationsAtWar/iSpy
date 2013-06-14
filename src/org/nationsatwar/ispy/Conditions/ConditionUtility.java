@@ -3,20 +3,18 @@ package org.nationsatwar.ispy.Conditions;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.Trigger;
 import org.nationsatwar.ispy.Actions.ActionUtility;
-import org.nationsatwar.ispy.SerializedObjects.ISpyItemStack;
-import org.nationsatwar.ispy.Utility.ConfigParser;
 
 public final class ConditionUtility {
+	
+	private static String equalsCondition = "==";
+	private static String notEqualsCondition = "!=";
+	private static String hasCondition = "has";
 	
 	public static void checkConditions(List<Trigger> triggers) {
 		
@@ -48,6 +46,22 @@ public final class ConditionUtility {
 	}
 	
 	private static boolean isTrueStatement(String condition, Trigger trigger) {
+		
+		String[] parsedCondition = parseCondition(condition);
+		
+		String operator = parsedCondition[0].toLowerCase();
+		
+		if (operator.equals(equalsCondition))
+			return EqualsCondition.conditionEquals(trigger, parseArguments(parsedCondition));
+		
+		else if (operator.equals(notEqualsCondition))
+			return EqualsCondition.conditionNotEquals(trigger, parseArguments(parsedCondition));
+		
+		else if (operator.equals(hasCondition))
+			return HasCondition.conditionHas(trigger, parseArguments(parsedCondition));
+		
+		return false;
+		/*
 		
 		for (int i = 1; i < condition.length(); i++) {
 			
@@ -107,5 +121,69 @@ public final class ConditionUtility {
 		}
 		
 		return false;
+		
+		*/
+	}
+	
+	private static String[] parseCondition(String condition) {
+		
+		int minLength;
+		
+		for (int i = 0; i < condition.length(); i++) {
+			
+			// minLength mainly protects against out of bounds errors, and keeps parsing numbers clean looking
+			minLength = 0;
+
+			// Returns arguments if condition contains the '==' operator
+			minLength = i + equalsCondition.length();
+			if (condition.length() >= minLength && condition.substring(i, minLength).equals(equalsCondition)) {
+				
+				String[] arguments = {
+						condition.substring(i, minLength),		// Condition Operator
+						condition.substring(0, i - 1).trim(),	// First Operand
+						condition.substring(minLength).trim()	// Second Operand
+				};
+				
+				return arguments;
+			}
+
+			// Returns arguments if condition contains the '!=' operator
+			minLength = i + notEqualsCondition.length();
+			if (condition.length() >= minLength && condition.substring(i, minLength).equals(notEqualsCondition)) {
+				
+				String[] arguments = {
+						condition.substring(i, minLength),		// Condition Operator
+						condition.substring(0, i - 1).trim(),	// First Operand
+						condition.substring(minLength).trim()	// Second Operand
+				};
+				
+				return arguments;
+			}
+
+			// Returns arguments if condition contains the 'has' operator
+			minLength = i + hasCondition.length();
+			if (condition.length() >= minLength && condition.substring(i, minLength).toLowerCase().equals(hasCondition)) {
+				
+				String[] arguments = {
+						condition.substring(i, minLength),		// Condition Operator
+						condition.substring(0, i - 1).trim(),	// First Operand
+						condition.substring(minLength).trim()	// Second Operand
+				};
+				
+				return arguments;
+			}
+		}
+		
+		return null;
+	}
+	
+	private static String[] parseArguments(String[] parsedCondition) {
+		
+		String[] arguments = new String[parsedCondition.length - 1];
+		
+		for (int i = 1; i < parsedCondition.length; i++)
+			arguments[i - 1] = parsedCondition[i];
+		
+		return arguments;
 	}
 }

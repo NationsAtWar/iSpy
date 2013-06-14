@@ -33,6 +33,13 @@ public final class ConfigParser  {
 					return eventObject;
 				}
 				
+				// Get World Variable Object if property contains 'world'
+				if (property.equals("world")) {
+					
+					Object eventObject = PropertyUtility.getWorldVariable(value, trigger.getWorldName());
+					return eventObject;
+				}
+				
 				// Get Trigger Variable Object if property contains 'trigger'
 				if (property.equals("trigger")) {
 					

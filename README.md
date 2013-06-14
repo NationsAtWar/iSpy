@@ -5,7 +5,7 @@ The Trigger System
 
 This is an extensive list of every event, condition, and action that iSpy uses.
 
-(PROPERTIES)
+(TRIGGER PROPERTIES)
 
 name
  - The name of the trigger, must be unique per world, same name as filename
@@ -26,6 +26,17 @@ global
 
 local
  - Only this trigger can read these variables
+
+(World PROPERTIES)
+
+world.time
+ - Returns the world time of the trigger world
+
+world.weather
+ - Returns whether the world is currently set to "clear", "rain", or "storm"
+
+world.playerCount
+ - Returns the number of players in the trigger world
 
 (EVENTS)
 
