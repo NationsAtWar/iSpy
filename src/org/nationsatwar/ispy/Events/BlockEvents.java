@@ -2,6 +2,8 @@ package org.nationsatwar.ispy.Events;
 
 import java.util.List;
 
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -74,7 +76,16 @@ public final class BlockEvents implements Listener {
     	// Add event properties to each trigger
     	for (Trigger trigger : triggers) {
     		
-    		trigger.setBlockLocation(new ISpyLocation(event.getClickedBlock().getLocation()));
+    		Block clickedBlock = event.getClickedBlock();
+    		
+    		if (clickedBlock != null) {
+    			
+    			Location blockLocation = clickedBlock.getLocation();
+        		
+        		if (blockLocation != null)
+        			trigger.setBlockLocation(new ISpyLocation(blockLocation));
+    		}
+    		
     		trigger.setBlockUser(event.getPlayer().getName());
     	}
     	

@@ -7,10 +7,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.SerializedObjects.ISpyBlock;
+import org.nationsatwar.ispy.SerializedObjects.ISpyItemStack;
 import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
 import org.nationsatwar.ispy.Utility.Debugger;
 
@@ -69,8 +69,8 @@ public final class RecordCommand {
 	    
 	    else if (commandData.equals("item")) {
 	    	
-	    	ItemStack item = player.getItemInHand();
-	    	config.set(ISpy.configRecordPath, item);
+	    	ISpyItemStack itemstack = new ISpyItemStack(player.getItemInHand());
+	    	config.set(ISpy.configRecordPath, itemstack.serialize());
 	    	
 	    	player.sendMessage(ChatColor.YELLOW + "The active item has been recorded.");
 	    }

@@ -19,6 +19,7 @@ public final class EventUtility {
 	// Event variables
 	public static String eventBlockPlacer = "event.blockPlacer";
 	public static String eventBlockBreaker = "event.blockBreaker";
+	public static String eventBlockUser = "event.blockUser";
 	public static String eventBlockLocation = "event.blockLocation";
 	
 	public static List<Trigger> getInitiatedTriggers(String worldName, String eventName) {
@@ -56,6 +57,8 @@ public final class EventUtility {
 			return trigger.getBlockPlacer();
 		if (property.equals(eventBlockBreaker))
 			return trigger.getBlockBreaker();
+		if (property.equals(eventBlockUser))
+			return trigger.getBlockUser();
 		else if (property.equals(eventBlockLocation))
 			return trigger.getBlockLocation();
 		

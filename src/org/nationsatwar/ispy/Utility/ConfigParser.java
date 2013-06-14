@@ -18,6 +18,8 @@ public final class ConfigParser  {
 				if (value.charAt(i) == '"')
 					return value.substring(1, i);
 		
+
+		// Checks to see if the value is a property
 		for (int i = 0; i < value.length(); i++) {
 			
 			if (value.charAt(i) == '.') {
@@ -40,7 +42,35 @@ public final class ConfigParser  {
 			}
 		}
 		
-		return value;
+		// Checks to see if the value is a local or global variable
+		Object variableObject = getVariable(value, trigger);
+		
+		return variableObject;
+	}
+	
+	private static Object getVariable(String variableName, Trigger trigger) {
+		
+		// Load the configuration file that matches the trigger name
+		File triggerFile = new File(trigger.getTriggerFileName());
+		FileConfiguration triggerConfig = YamlConfiguration.loadConfiguration(triggerFile);
+		
+		String variablePath = ISpy.configVariablesLocalPath + "." + variableName;
+		
+		if (triggerConfig.isString(variablePath))
+			return triggerConfig.getString(variablePath);
+		
+		if (triggerConfig.isConfigurationSection(variablePath))
+			return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+		
+		variablePath = ISpy.configVariablesGlobalPath + "." + variableName;
+		
+		if (triggerConfig.isString(variablePath))
+			return triggerConfig.getString(variablePath);
+		
+		if (triggerConfig.isConfigurationSection(variablePath))
+			return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+		
+		return variableName;
 	}
 	
 	private static Object getTriggerVariable(String property, Trigger trigger) {

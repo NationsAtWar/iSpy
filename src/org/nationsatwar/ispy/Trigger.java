@@ -58,7 +58,10 @@ public final class Trigger {
 	
 	public Map<?, ?> getBlockLocation() {
 		
-		return blockLocation.serialize();
+		if (blockLocation != null)
+			return blockLocation.serialize();
+		else
+			return null;
 	}
 	
 	// Setters

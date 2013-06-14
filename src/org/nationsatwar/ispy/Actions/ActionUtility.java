@@ -59,17 +59,16 @@ public final class ActionUtility {
 	
 	private static void assignmentAction(String action, Trigger trigger, int assignmentOperatorPos) {
 		
-		String firstValue = action.substring(0, assignmentOperatorPos - 1).trim();
-		String secondValue = action.substring(assignmentOperatorPos + 1).trim();
+		String variableName = action.substring(0, assignmentOperatorPos - 1).trim();
+		String newValue = action.substring(assignmentOperatorPos + 1).trim();
 		
-		String variableName = (String) ConfigParser.getLiteral(firstValue, trigger);
-		Object variableValue = ConfigParser.getLiteral(secondValue, trigger);
+		Object variableValue = ConfigParser.getLiteral(newValue, trigger);
 		ConfigurationSerializable serializedValue = (variableValue instanceof ConfigurationSerializable) ? 
 			(ConfigurationSerializable) variableValue : null;
 		
 		if (variableValue == null) {
 			
-			Debugger.invalidValue(trigger, secondValue);
+			Debugger.invalidValue(trigger, newValue);
 			return;
 		}
 		
