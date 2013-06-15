@@ -4,12 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.configuration.serialization.SerializableAs;
 
-@SerializableAs("Location")
-public final class ISpyLocation implements ConfigurationSerializable {
+public final class ISpyLocation {
 
 	public String worldName;
 	
@@ -18,8 +14,6 @@ public final class ISpyLocation implements ConfigurationSerializable {
 	public int locationZ;
 		
 	public ISpyLocation(Location location) {
-		
-		ConfigurationSerialization.registerClass(ISpyLocation.class, "ISpyLocation");
 		
 		worldName = location.getWorld().getName();
 		
@@ -36,7 +30,6 @@ public final class ISpyLocation implements ConfigurationSerializable {
 		locationZ = (Integer) map.get("Z");
 	}
 	
-	@Override
 	public Map<String, Object> serialize() {
 		
         Map<String, Object> map = new TreeMap<String, Object>();

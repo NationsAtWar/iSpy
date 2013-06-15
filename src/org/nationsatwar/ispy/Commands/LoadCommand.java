@@ -39,7 +39,7 @@ public final class LoadCommand {
 	    }
 	    
 	    // Set the trigger as active for this user
-    	plugin.triggerManager.setActiveTrigger(player.getName(), fullTriggerPath);
+    	plugin.triggerManager.addActiveTrigger(player.getName(), fullTriggerPath);
     	
     	player.sendMessage(ChatColor.YELLOW + triggerName + " has been loaded.");
 	}

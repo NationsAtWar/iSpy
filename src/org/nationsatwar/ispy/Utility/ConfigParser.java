@@ -11,37 +11,36 @@ import org.nationsatwar.ispy.Events.EventUtility;
 public final class ConfigParser  {
 	
 	public static Object getLiteral(String value, Trigger trigger) {
-		
+
 		// If the value is itself a literal, remove quotations and return
 		if (value.charAt(0) == '"')
 			for (int i = 1; i < value.length(); i++)
 				if (value.charAt(i) == '"')
 					return value.substring(1, i);
-		
 
 		// Checks to see if the value is a property
 		for (int i = 0; i < value.length(); i++) {
 			
 			if (value.charAt(i) == '.') {
 				
-				String property = value.substring(0, i);
+				String variable = value.substring(0, i);
 				
-				// Get Event Object if property contains 'event'
-				if (property.equals("event")) {
+				// Get Event Property if variable equals 'event'
+				if (variable.equals("event")) {
 					
 					Object eventObject = EventUtility.getEventVariable(value, trigger);
 					return eventObject;
 				}
 				
-				// Get World Variable Object if property contains 'world'
-				if (property.equals("world")) {
+				// Get World Property if variable equals 'world'
+				else if (variable.equals("world")) {
 					
 					Object eventObject = PropertyUtility.getWorldVariable(value, trigger.getWorldName());
 					return eventObject;
 				}
 				
-				// Get Trigger Variable Object if property contains 'trigger'
-				if (property.equals("trigger")) {
+				// Get Trigger Property if variable equals 'trigger'
+				else if (variable.equals("trigger")) {
 					
 					Object triggerVariableObject = getTriggerVariable(value.substring(i + 1), trigger);
 					return triggerVariableObject;
@@ -63,19 +62,31 @@ public final class ConfigParser  {
 		
 		String variablePath = ISpy.configVariablesLocalPath + "." + variableName;
 		
-		if (triggerConfig.isString(variablePath))
-			return triggerConfig.getString(variablePath);
-		
-		if (triggerConfig.isConfigurationSection(variablePath))
-			return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+		if (triggerConfig.isSet(variablePath)) {
+			
+			if (triggerConfig.isConfigurationSection(variablePath))
+				return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+			else if (triggerConfig.isString(variablePath))
+				return triggerConfig.getString(variablePath);
+			else if (triggerConfig.isInt(variablePath))
+				return triggerConfig.getInt(variablePath);
+			else
+				return triggerConfig.get(variablePath);
+		}
 		
 		variablePath = ISpy.configVariablesGlobalPath + "." + variableName;
+
+		if (triggerConfig.isSet(variablePath)) {
 		
-		if (triggerConfig.isString(variablePath))
-			return triggerConfig.getString(variablePath);
-		
-		if (triggerConfig.isConfigurationSection(variablePath))
-			return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+			if (triggerConfig.isConfigurationSection(variablePath))
+				return triggerConfig.getConfigurationSection(variablePath).getValues(true);
+			else if (triggerConfig.isString(variablePath))
+				return triggerConfig.getString(variablePath);
+			else if (triggerConfig.isInt(variablePath))
+				return triggerConfig.getInt(variablePath);
+			else
+				return triggerConfig.get(variablePath);
+		}
 		
 		return variableName;
 	}

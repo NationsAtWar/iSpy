@@ -81,7 +81,7 @@ public final class CreateCommand {
 	    catch (IOException e) { ISpy.log("Error saving config file: " + e.getMessage()); }
 	    
 	    // Set the trigger to active for this user
-    	plugin.triggerManager.setActiveTrigger(player.getName(), fullTriggerPath);
+    	plugin.triggerManager.addActiveTrigger(player.getName(), fullTriggerPath);
     	
     	player.sendMessage(ChatColor.YELLOW + "Trigger name: '" + triggerName + "' created.");
     	player.sendMessage(ChatColor.YELLOW + "Edit '" + triggerFile.getPath() + "' to start scripting your trigger.");

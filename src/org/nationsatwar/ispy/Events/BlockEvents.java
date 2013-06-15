@@ -41,7 +41,7 @@ public final class BlockEvents implements Listener {
     	}
     	
     	// Send triggers to check against conditions
-    	ConditionUtility.checkConditions(triggers);
+    	ConditionUtility.checkConditions(triggers, plugin);
     }
     
     @EventHandler
@@ -61,7 +61,7 @@ public final class BlockEvents implements Listener {
     	}
     	
     	// Send triggers to check against conditions
-    	ConditionUtility.checkConditions(triggers);
+    	ConditionUtility.checkConditions(triggers, plugin);
     }
     
     @EventHandler
@@ -90,6 +90,6 @@ public final class BlockEvents implements Listener {
     	}
     	
     	// Send triggers to check against conditions
-    	ConditionUtility.checkConditions(triggers);
+    	ConditionUtility.checkConditions(triggers, plugin);
     }
 }

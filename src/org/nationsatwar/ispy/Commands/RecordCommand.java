@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.SerializedObjects.ISpyBlock;
+import org.nationsatwar.ispy.SerializedObjects.ISpyEntity;
 import org.nationsatwar.ispy.SerializedObjects.ISpyItemStack;
 import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
+import org.nationsatwar.ispy.SerializedObjects.ISpyRegion;
 import org.nationsatwar.ispy.Utility.Debugger;
 
 public final class RecordCommand {
@@ -33,6 +36,7 @@ public final class RecordCommand {
 	 * <b>Location</b>: The current location of the player's targeted block<br>
 	 * <b>Item</b>: The current selected item of the player<br>
 	 * <b>Block</b>: The block data of the player's targeted block<br>
+	 * <b>Entity</b>: The entity data of the player's targeted entity<br>
 	 * 
 	 * @param player  Player sending the command
 	 * @param commandData  The data of the record command to respond to
@@ -81,6 +85,26 @@ public final class RecordCommand {
 	    	config.set(ISpy.configRecordPath, block.serialize());
 	    	
 	    	player.sendMessage(ChatColor.YELLOW + "The targeted block has been recorded.");
+	    }
+	    
+	    else if (commandData.equals("entity")) {
+	    	
+	    	ISpyEntity entity = new ISpyEntity(player);
+	    	config.set(ISpy.configRecordPath, entity.serialize());
+	    	
+	    	player.sendMessage(ChatColor.YELLOW + "The targeted entity has been recorded.");
+	    }
+	    
+	    else if (commandData.equals("debug")) {
+
+	    	ISpyLocation location1 = new ISpyLocation(player.getTargetBlock(null, 10).getLocation());
+	    	ISpyLocation location2 = new ISpyLocation(new Location(plugin.getServer().getWorld("world"), 10, 70, 10));
+	    	
+	    	ISpyRegion region = new ISpyRegion(location1, location2);
+	    	
+	    	config.set(ISpy.configRecordPath, region.serialize());
+	    	
+	    	player.sendMessage(ChatColor.YELLOW + "The targeted entity has been recorded.");
 	    }
 	    
 	    else

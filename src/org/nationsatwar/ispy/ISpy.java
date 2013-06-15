@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.nationsatwar.ispy.Events.BlockEvents;
+import org.nationsatwar.ispy.Events.RegionEvents;
 import org.nationsatwar.ispy.Utility.CommandParser;
-
 
 /**
  * The iSpy parent class.
@@ -38,6 +38,8 @@ public final class ISpy extends JavaPlugin {
 	 * Initializes the plugin on server startup.
 	 */
 	public void onEnable() {
+    	
+		new RegionEvents(this).runTaskTimer(this, 0, 20);
 		
 		// Set Command Executor
     	getCommand("ispy").setExecutor(commandParser);

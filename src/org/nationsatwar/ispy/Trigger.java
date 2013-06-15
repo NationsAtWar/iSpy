@@ -1,5 +1,6 @@
 package org.nationsatwar.ispy;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -12,9 +13,15 @@ public final class Trigger {
 	private final String triggerName;
 	private final String worldName;
 	
+	private String eventTrigger;
+	private List<String> eventParameters;
+	
 	private String blockPlacer;
 	private String blockBreaker;
 	private String blockUser;
+	
+	private String enteringPlayer;
+	private String leavingPlayer;
 	
 	private ISpyLocation blockLocation;
 	
@@ -25,20 +32,29 @@ public final class Trigger {
 	}
 	
 	// Getters
+	public String getTriggerFileName() {
+		
+		return worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension;
+	}
+	
 	public String getTriggerName() {
 		
 		return triggerName;
 	}
 	
+	public String getEventTrigger() {
+		
+		return eventTrigger;
+	}
+	
+	public List<String> getEventParameters() {
+		
+		return eventParameters;
+	}
+	
 	public String getWorldName() {
 		
 		return worldName;
-	}
-	
-	// Getters
-	public String getTriggerFileName() {
-		
-		return worldName + ISpy.triggerPath + triggerName + ISpy.triggerExtension;
 	}
 	
 	public String getBlockPlacer() {
@@ -56,6 +72,16 @@ public final class Trigger {
 		return blockUser;
 	}
 	
+	public String getEnteringPlayer() {
+		
+		return enteringPlayer;
+	}
+	
+	public String getLeavingPlayer() {
+		
+		return leavingPlayer;
+	}
+	
 	public Map<?, ?> getBlockLocation() {
 		
 		if (blockLocation != null)
@@ -65,6 +91,16 @@ public final class Trigger {
 	}
 	
 	// Setters
+	public void setEventTrigger(String eventTrigger) {
+		
+		this.eventTrigger = eventTrigger;
+	}
+
+	public void addEventParameters(List<String> eventParameters) {
+		
+		this.eventParameters = eventParameters;
+	}
+	
 	public void setBlockPlacer(String blockPlacer) {
 		
 		this.blockPlacer = blockPlacer;
@@ -78,6 +114,16 @@ public final class Trigger {
 	public void setBlockUser(String blockUser) {
 		
 		this.blockUser = blockUser;
+	}
+	
+	public void setEnteringPlayer(String enteringPlayer) {
+		
+		this.enteringPlayer = enteringPlayer;
+	}
+	
+	public void setLeavingPlayer(String leavingPlayer) {
+		
+		this.leavingPlayer = leavingPlayer;
 	}
 	
 	public void setBlockLocation(ISpyLocation blockLocation) {

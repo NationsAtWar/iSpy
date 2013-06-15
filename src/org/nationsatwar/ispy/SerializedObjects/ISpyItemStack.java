@@ -3,13 +3,9 @@ package org.nationsatwar.ispy.SerializedObjects;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.inventory.ItemStack;
 
-@SerializableAs("ItemStack")
-public final class ISpyItemStack implements ConfigurationSerializable {
+public final class ISpyItemStack {
 
 	public String itemType;
 	public int itemID;
@@ -17,8 +13,6 @@ public final class ISpyItemStack implements ConfigurationSerializable {
 	public int itemDurability;
 		
 	public ISpyItemStack(ItemStack itemstack) {
-		
-		ConfigurationSerialization.registerClass(ISpyItemStack.class, "ISpyItemStack");
 		
 		itemType = itemstack.getType().toString();
 		itemID = itemstack.getTypeId();
@@ -34,7 +28,6 @@ public final class ISpyItemStack implements ConfigurationSerializable {
 		itemDurability = (Integer) map.get("Durability");
 	}
 	
-	@Override
 	public Map<String, Object> serialize() {
 		
         Map<String, Object> map = new TreeMap<String, Object>();

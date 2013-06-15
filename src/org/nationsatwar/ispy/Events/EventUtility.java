@@ -16,6 +16,9 @@ public final class EventUtility {
 	public static String blockBreak = "block.break";
 	public static String blockUse = "block.use";
 	
+	public static String regionEnter = "region.enter";
+	public static String regionLeave = "region.leave";
+	
 	// Event variables
 	public static String eventBlockPlacer = "event.blockPlacer";
 	public static String eventBlockBreaker = "event.blockBreaker";
@@ -38,13 +41,23 @@ public final class EventUtility {
 			boolean triggerActive = triggerConfig.getBoolean(ISpy.configActivePath); // Trigger must be active
 			int triggerCounter = triggerConfig.getInt(ISpy.configCounterPath); // Counter must not be 0
 			
-			// If config file exists, is active, the counter is not at 0, 
-			// and contains the event name, then add trigger to List
-			if (triggerConfig != null && triggerActive && triggerCounter != 0 && 
-					triggerConfig.getStringList(ISpy.configEventsPath).contains(eventName)) {
-				
-				Trigger trigger = new Trigger(triggerFile.getName().replaceFirst("[.][^.]+$", ""), worldName);
-				triggers.add(trigger);
+			// If config file exists, is active, and the counter is not at 0 - continue
+			if (triggerConfig != null && triggerActive && triggerCounter != 0) {
+
+				// If event list contains the event name, parse parameters and add trigger to list
+				for (String event : triggerConfig.getStringList(ISpy.configEventsPath)) {
+					
+					if (event.length() < eventName.length())
+						continue;
+					
+					if (event.substring(0, eventName.length()).equals(eventName)) {
+						
+						Trigger trigger = new Trigger(triggerFile.getName().replaceFirst("[.][^.]+$", ""), worldName);
+						trigger.setEventTrigger(eventName);
+						trigger.addEventParameters(parseParameters(event.substring(eventName.length())));
+						triggers.add(trigger);
+					}
+				}
 			}
 		}
 		
@@ -63,5 +76,28 @@ public final class EventUtility {
 			return trigger.getBlockLocation();
 		
 		return property;
+	}
+	
+	private static List<String> parseParameters(String parameter) {
+		
+		List<String> parameters = new ArrayList<String>();
+		
+		for (int i = 0; i < parameter.length(); i++)
+			if (parameter.charAt(i) == '(')
+				for (int j = i + 1; j < parameter.length(); j++) {
+					
+					if (parameter.charAt(j) == ',') {
+						
+						parameters.add(parameter.substring(i + 1, j).trim());
+						i = j;
+					}
+					if (parameter.charAt(j) == ')') {
+						
+						parameters.add(parameter.substring(i + 1, j).trim());
+						return parameters;
+					}
+				}
+		
+		return parameters;
 	}
 }
