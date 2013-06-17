@@ -42,8 +42,6 @@ public final class TriggerManager {
 		
 		if (playerRegions.get(playerName) == null) {
 			
-			ISpy.log("Adding player region");
-			
 			List<Map<String, Object>> regionList = new ArrayList<Map<String,Object>>();
 			regionList.add(playerRegion);
 			

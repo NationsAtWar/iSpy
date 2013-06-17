@@ -11,7 +11,7 @@ import org.nationsatwar.ispy.Utility.ConfigParser;
 
 public class InCondition {
 	
-	public static boolean conditionIn(Trigger trigger, String[] condition, ISpy plugin, boolean entering) {
+	public static boolean conditionIn(Trigger trigger, String[] condition, ISpy plugin, boolean entering, boolean isNot) {
 		
 		Object firstValue = ConfigParser.getLiteral(condition[0], trigger);
 		Object secondValue = ConfigParser.getLiteral(condition[1], trigger);
@@ -36,10 +36,13 @@ public class InCondition {
 			
 			ISpyRegion iSpyRegion = new ISpyRegion(ispyLocation1, ispyLocation2);
 			
-			if (plugin.triggerManager.containsPlayerRegion(playerName, iSpyRegion.serialize()))
-				return true;
-			else
-				return false;
+			if (plugin.triggerManager.containsPlayerRegion(playerName, iSpyRegion.serialize())) {
+				
+				if (isNot)
+					return false;
+				else
+					return true;
+			}
 		}
 		
 		return false;

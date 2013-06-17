@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.nationsatwar.ispy.Events.BlockEvents;
+import org.nationsatwar.ispy.Events.DoorEvents;
 import org.nationsatwar.ispy.Events.RegionEvents;
 import org.nationsatwar.ispy.Utility.CommandParser;
 
@@ -46,6 +47,7 @@ public final class ISpy extends JavaPlugin {
 		
     	// Register Events
 		getServer().getPluginManager().registerEvents(new BlockEvents(this), this);
+		getServer().getPluginManager().registerEvents(new DoorEvents(this), this);
     	
     	log("iSpy has been enabled.");
 	}

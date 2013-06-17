@@ -5,12 +5,15 @@ import java.io.IOException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import org.nationsatwar.ispy.ISpy;
 import org.nationsatwar.ispy.SerializedObjects.ISpyBlock;
+import org.nationsatwar.ispy.SerializedObjects.ISpyDoor;
 import org.nationsatwar.ispy.SerializedObjects.ISpyEntity;
 import org.nationsatwar.ispy.SerializedObjects.ISpyItemStack;
 import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
@@ -93,6 +96,21 @@ public final class RecordCommand {
 	    	config.set(ISpy.configRecordPath, entity.serialize());
 	    	
 	    	player.sendMessage(ChatColor.YELLOW + "The targeted entity has been recorded.");
+	    }
+	    
+	    else if (commandData.equals("door")) {
+	    	
+	    	Block block = player.getTargetBlock(null, 10);
+	    	
+	    	if (block.getType().equals(Material.WOODEN_DOOR) || block.getType().equals(Material.IRON_DOOR_BLOCK)) {
+    			
+    			ISpyDoor door = new ISpyDoor(block);
+    	    	config.set(ISpy.configRecordPath, door.serialize());
+    	    	
+    	    	player.sendMessage(ChatColor.YELLOW + "The targeted door has been recorded.");
+    	    	
+	    	} else
+		    	player.sendMessage(ChatColor.YELLOW + "You need to target a door to record this value.");
 	    }
 	    
 	    else if (commandData.equals("debug")) {

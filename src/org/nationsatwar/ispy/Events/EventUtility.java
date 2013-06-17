@@ -19,6 +19,9 @@ public final class EventUtility {
 	public static String regionEnter = "region.enter";
 	public static String regionLeave = "region.leave";
 	
+	public static String doorOpen = "door.open";
+	public static String doorClose = "door.close";
+	
 	// Event variables
 	public static String eventBlockPlacer = "event.blockPlacer";
 	public static String eventBlockBreaker = "event.blockBreaker";

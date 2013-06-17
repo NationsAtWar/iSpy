@@ -11,7 +11,7 @@ import org.nationsatwar.ispy.Utility.ConfigParser;
 
 public class HasCondition {
 	
-	public static boolean conditionHas(Trigger trigger, String[] condition) {
+	public static boolean conditionHas(Trigger trigger, String[] condition, boolean isNot) {
 		
 		Object firstValue = ConfigParser.getLiteral(condition[0], trigger);
 		Object secondValue = ConfigParser.getLiteral(condition[1], trigger);
@@ -40,13 +40,19 @@ public class HasCondition {
 			
 			Inventory playerInventory = Bukkit.getServer().getPlayer(firstValue.toString()).getInventory();
 			
-			if (playerInventory.contains(itemstack.getTypeId(), itemstack.getAmount()))
+			if (playerInventory.contains(itemstack.getTypeId(), itemstack.getAmount()) && !isNot)
 				return true;
+			else if (!playerInventory.contains(itemstack.getTypeId(), itemstack.getAmount()) && isNot)
+				return true;
+			else
+				return false;
 		}
 		
-		if (firstValue.equals(secondValue))
+		if (firstValue.toString().contains(secondValue.toString()) && !isNot)
 			return true;
-		
-		return false;
+		else if (!firstValue.toString().contains(secondValue.toString()) && isNot)
+			return true;
+		else
+			return false;
 	}
 }

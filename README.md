@@ -3,7 +3,10 @@ iSpy
 
 The Trigger System
 
-This is an extensive list of every event, condition, and action that iSpy uses.
+This is an extensive list of every variable, property, event, condition, and action that iSpy uses.
+
+Note that each trigger is dependent on a world and will not work outside that world. The world is implied by 
+the directory in which the triggers folder rests in.
 
 (TRIGGER PROPERTIES)
 
@@ -38,6 +41,33 @@ world.weather
 world.playerCount
  - Returns the number of players in the trigger world
 
+(VARIABLE TYPES)
+
+Custom variables can be created and used in an iSpy script, so long as they're assigned their type name 
+and their specified properties
+
+(e.g)
+  someBlockLocation
+    varType: Location
+    x: 35
+    y: 72
+    z: -102
+
+Location
+ - x
+ - y
+ - z
+
+Region
+ - Location 1
+ - Location 2
+
+Block
+ - Type
+ - ID
+ - Amount
+ - Durability
+
 (EVENTS)
 
 Each event will store a number of hidden local variables that the rest of the trigger can use.
@@ -54,12 +84,25 @@ block.use
  - event.blockLocation
  - event.blockUser
 
+region.enter(regionName)
+ - regionName
+
+region.leave(regionName)
+ - regionName
+
 (CONDITIONS)
 
 Conditional Operators
  - '==' - If both the operands match, then return true
  - '!=' - If both the operands don't match, then return true
- - 'HAS' - If the left operand contains the right operand, then return true
+ - '>' - If both operands are integers, and the left operand is larger than the right operand, then return true
+ - '<' - If both operands are integers, and the left operand is smaller than the right operand, then return true
+ - '>=' - If the left operand is greater than or equal to the right operand, then return true
+ - '<=' - If the left operand is less than or equal to the right operand, then return true
+ - 'HAS' - If the left operand contains the right operand, then return true. This can be either a string inside 
+ another string, or an ItemStack within a player inventory (specified by player name or player object)
+ - 'IN' - If the left operand is inside the right operand, then return true. This can be location or a player name 
+ or a player object inside a region.
 
 (ACTIONS)
 
