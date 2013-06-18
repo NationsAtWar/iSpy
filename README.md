@@ -38,6 +38,10 @@ world.time
 world.weather
  - Returns whether the world is currently set to "clear", "rain", or "storm"
 
+world.moonPhase
+ - Returns the state of the moon as either: "new moon", "waxing crescent", "waxing half", "waxing gibbous", "full moon", 
+ "waning gibbous", "waning half", and "waning crescent"
+
 world.playerCount
  - Returns the number of players in the trigger world
 
