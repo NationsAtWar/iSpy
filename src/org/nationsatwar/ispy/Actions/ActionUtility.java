@@ -15,8 +15,9 @@ import org.nationsatwar.ispy.Utility.Debugger;
 public final class ActionUtility {
 	
 	private static String messageAction = "message";
+	private static String cancelAction = "cancel";
 	
-	public static void executeActions(Trigger trigger, List<String> actionList) {
+	public static void executeActions(Trigger trigger, List<String> actionList, ISpy plugin) {
 		
 		// Cycle through each action
 		for (String action : actionList) {
@@ -27,6 +28,15 @@ public final class ActionUtility {
 			if (actionType.equals(messageAction)) {
 				
 				if (!MessageAction.execute(trigger, action.substring(messageAction.length() + 1)))
+					Debugger.invalidAction(trigger, action);
+				
+				continue;
+			}
+
+			// Check if cancel operation
+			else if (actionType.equals(cancelAction)) {
+				
+				if (!CancelAction.execute(trigger, plugin))
 					Debugger.invalidAction(trigger, action);
 				
 				continue;
@@ -107,6 +117,6 @@ public final class ActionUtility {
 			if (action.charAt(i) == ' ')
 				return action.substring(0, i);;
 			
-		return "";
+		return action;
 	}
 }

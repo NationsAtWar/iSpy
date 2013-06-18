@@ -11,6 +11,8 @@ import org.nationsatwar.ispy.Trigger;
 
 public final class EventUtility {
 	
+	ISpy plugin;
+	
 	// Event Names
 	public static String blockPlace = "block.place";
 	public static String blockBreak = "block.break";
@@ -22,11 +24,41 @@ public final class EventUtility {
 	public static String doorOpen = "door.open";
 	public static String doorClose = "door.close";
 	
-	// Event variables
+	// Event Variables
 	public static String eventBlockPlacer = "event.blockPlacer";
 	public static String eventBlockBreaker = "event.blockBreaker";
 	public static String eventBlockUser = "event.blockUser";
 	public static String eventBlockLocation = "event.blockLocation";
+	
+	// Miscellaneous
+	private boolean cancelEvent = false;
+	public boolean eventDelay = false;
+	
+	public EventUtility(ISpy plugin) {
+		
+		this.plugin = plugin;
+	}
+	
+	public void setEventCancellation() {
+		
+		cancelEvent = true;
+	}
+	
+	public boolean isEventCancelled() {
+		
+		if (cancelEvent) {
+			
+			cancelEvent = false;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isEventDelayed() {
+		
+		return eventDelay;
+	}
 	
 	public static List<Trigger> getInitiatedTriggers(String worldName, String eventName) {
 		

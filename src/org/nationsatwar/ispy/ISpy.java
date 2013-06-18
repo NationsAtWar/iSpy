@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.nationsatwar.ispy.Events.BlockEvents;
 import org.nationsatwar.ispy.Events.DoorEvents;
+import org.nationsatwar.ispy.Events.EventUtility;
 import org.nationsatwar.ispy.Events.RegionEvents;
 import org.nationsatwar.ispy.Utility.CommandParser;
 
@@ -32,6 +33,9 @@ public final class ISpy extends JavaPlugin {
 	public static final String configConditionsPath = "trigger.conditions";
 	public static final String configActionsPath = "trigger.actions";
 	public static final String configRecordPath = "trigger.record";
+	
+	// iSpy Utility Classes
+	public EventUtility eventUtil = new EventUtility(this);
 	
 	private static final Logger log = Logger.getLogger("Minecraft");
 

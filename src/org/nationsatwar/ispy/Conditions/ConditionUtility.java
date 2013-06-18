@@ -72,7 +72,7 @@ public final class ConditionUtility {
 			}
 			
 			// Execute Action List if all conditions are true
-			ActionUtility.executeActions(trigger, triggerConfig.getStringList(ISpy.configActionsPath));
+			ActionUtility.executeActions(trigger, triggerConfig.getStringList(ISpy.configActionsPath), plugin);
 		}
 	}
 	

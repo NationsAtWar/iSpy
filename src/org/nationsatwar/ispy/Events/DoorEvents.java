@@ -19,6 +19,9 @@ import org.nationsatwar.ispy.SerializedObjects.ISpyLocation;
 
 public final class DoorEvents implements Listener {
 	
+	private Block doorBlock;
+	private int blockPower;
+	
 	protected final ISpy plugin;
     
     public DoorEvents(ISpy plugin) {
@@ -64,6 +67,10 @@ public final class DoorEvents implements Listener {
     	
     	// Send triggers to check against conditions
     	ConditionUtility.checkConditions(triggers, plugin);
+    	
+    	// Cancel event if specified by action
+    	if (plugin.eventUtil.isEventCancelled())
+    		event.setCancelled(true);
     }
     
     @EventHandler
@@ -77,11 +84,16 @@ public final class DoorEvents implements Listener {
 		// Cancels event unless the affected block is an iron door
     	if (!eventBlock.getType().equals(Material.IRON_DOOR_BLOCK))
     		return;
-
+    	
+    	// Redstone takes a second to become accustomed to it's new power level and thus a delay timer is in order
+    	if (plugin.eventUtil.isEventDelayed() && event.getBlock().equals(doorBlock)) {
+    		
+    		event.setNewCurrent(blockPower);
+    		return;
+    	}
+    	
     	ISpyDoor door = new ISpyDoor(eventBlock);
     	List<Trigger> triggers;
-    	
-    	ISpy.log(door.isDoorOpen() + "");
     	
     	// Get list of all triggers that contain event (Different list dependent on doorOpen or doorClose)
     	if (door.isDoorOpen())
@@ -103,5 +115,20 @@ public final class DoorEvents implements Listener {
     	
     	// Send triggers to check against conditions
     	ConditionUtility.checkConditions(triggers, plugin);
+    	
+    	if (plugin.eventUtil.isEventCancelled()) {
+    		
+    		if (door.isDoorOpen())
+        		event.setNewCurrent(15);
+    		else
+        		event.setNewCurrent(0);
+    	}
+    	
+    	doorBlock = eventBlock;
+    	blockPower = event.getNewCurrent();
+
+		plugin.eventUtil.eventDelay = true;
+    	DelayTimer delay = new DelayTimer(plugin);
+    	delay.runTaskLaterAsynchronously(plugin, 1);
     }
 }
