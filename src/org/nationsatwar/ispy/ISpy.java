@@ -18,8 +18,8 @@ import org.nationsatwar.ispy.Utility.CommandParser;
  */
 public final class ISpy extends JavaPlugin {
 	
-	public final CommandParser commandParser = new CommandParser(this);;
-	public final TriggerManager triggerManager = new TriggerManager(this);;
+	public final CommandParser commandParser = new CommandParser(this);
+	public final TriggerManager triggerManager = new TriggerManager(this);
 	
 	// iSpy Path Details
 	public static final String triggerPath = "/triggers/";

@@ -68,7 +68,7 @@ public final class CommandParser implements CommandExecutor {
 
 		sender.sendMessage(ChatColor.DARK_RED + "[Nations at War]" + ChatColor.DARK_AQUA + " -=[ISPY]=-");
 		sender.sendMessage(ChatColor.YELLOW + "Allows you to create and manage triggers.");
-		sender.sendMessage(ChatColor.YELLOW + "Command List: Create");
+		sender.sendMessage(ChatColor.YELLOW + "Command List: Create, Load, Record");
 	}
 
 	/**
